@@ -9,6 +9,14 @@ This project builds a streaming data pipeline using NYC TLC Yellow Taxi trip dat
 The pipeline reads Parquet data, publishes taxi events to Apache Kafka, consumes the events using Python, stores them in PostgreSQL, and visualizes the processed data through Power BI.
 
 ## Architecture
+```mermaid
+flowchart LR
+    A[NYC TLC Parquet Data] --> B[Python Producer]
+    B --> C[Apache Kafka]
+    C --> D[Python Consumer]
+    D --> E[PostgreSQL]
+    E --> F[Power BI Dashboard]
+```
 
 NYC TLC Parquet Dataset
         ↓
