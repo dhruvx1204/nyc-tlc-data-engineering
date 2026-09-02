@@ -1,21 +1,28 @@
 import json
+import os
 import psycopg2
 from kafka import KafkaConsumer
 
 
+# ==============================
 # PostgreSQL connection
+# ==============================
+
 conn = psycopg2.connect(
     host="localhost",
     port=5432,
     database="nyc_tlc",
     user="postgres",
-    password="Dhruv@1204"
+    password=os.getenv("POSTGRES_PASSWORD")
 )
 
 cursor = conn.cursor()
 
 
+# ==============================
 # Kafka consumer
+# ==============================
+
 consumer = KafkaConsumer(
     "nyc-tlc-trips",
     bootstrap_servers="localhost:9092",
@@ -26,6 +33,10 @@ consumer = KafkaConsumer(
 
 print("Waiting for NYC TLC events...")
 
+
+# ==============================
+# Process Kafka messages
+# ==============================
 
 for message in consumer:
 
@@ -48,7 +59,6 @@ for message in consumer:
         if not all(field in data for field in required_fields):
             print("Skipped non-TLC event")
             continue
-
 
         # Insert into PostgreSQL
         cursor.execute(
@@ -87,7 +97,6 @@ for message in consumer:
 
         conn.commit()
 
-
         # Check whether row was inserted
         if cursor.rowcount == 1:
 
@@ -104,11 +113,9 @@ for message in consumer:
                 f"Distance: {data.get('trip_distance')} miles"
             )
 
-
     except json.JSONDecodeError:
 
         print("Skipped invalid JSON event")
-
 
     except Exception as e:
 
