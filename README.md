@@ -108,6 +108,7 @@ Power BI connects to PostgreSQL and provides an analytics dashboard containing:
 - Revenue by Vendor
 - Trip Distance vs Revenue
 - Payment Type Analysis
+![NYC TLC Power BI Dashboard](nyc_tlc_dashboard.png)
 
 ## Example Results
 
